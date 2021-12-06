@@ -3,9 +3,6 @@
 #
 # By Shivoy Arora
 
-from os import read
-
-
 file = open("input1.txt", "r")
 
 readings = file.readlines()
