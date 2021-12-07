@@ -99,6 +99,7 @@ if __name__ == "__main__":
     boards.pop(0)
     boards.append(board)
 
+    # Playing Bingo
     winIndex = []
     finalBoards = []
 
