@@ -1,5 +1,5 @@
 # Advent Of coding 
-# Day 3
+# Day 4
 #
 # By Shivoy Arora
 
@@ -71,6 +71,7 @@ def boardSum(index):
 
     return sum
 
+""" Main Function """
 if __name__ == "__main__":
     
     file = open("input4.txt", "r")
@@ -127,7 +128,6 @@ if __name__ == "__main__":
     # Part 2
     #
     # Choosing which board wins last
-
     loseBoardIndex = winIndex.index(max(winIndex))
 
     loseSum = boardSum(loseBoardIndex)
