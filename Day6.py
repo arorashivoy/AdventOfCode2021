@@ -13,7 +13,7 @@ def sumFind():
 
     return ctr
 
-file = open("input6.txt", "r")
+file = open("input/input6.txt", "r")
 
 readings = file.readlines()
 

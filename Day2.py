@@ -3,7 +3,7 @@
 #
 # By Shivoy Arora
 
-file = open("input2.txt", "r")
+file = open("input/input2.txt", "r")
 
 readings = file.readlines()
 
