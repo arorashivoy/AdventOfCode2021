@@ -2,54 +2,113 @@
 #
 # https://github.com/IanFindlay/advent-of-code/blob/master/2021/
 
-with open('input/input9.txt', 'r') as aoc_input:
-    rows = [line.strip() for line in aoc_input.readlines()]
+def checkAdjacent(i, j, basin: set):
+    global readings
 
-height_map = {}
-for y, row in enumerate(rows):
-    for x, height in enumerate(row):
-        height_map[(x, y)] = int(height)
+    try:
+        # if adjacen tis X then add to that list
+        if readings[i][j+1] == "X":
+            for a in range(len(basins)):
+                    for b in range(len(basins[a])):
+                        if basins[a][b] == (i,j+1):
+                            basins[a].extend(basin)
+                            basin = set()
 
-low_points = []
-low_points_sum = 0
-for coords, height in height_map.items():
-    x, y = coords
-    adjacent = ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))
-    lowest = True
-    for neighbour in adjacent:
-        if height_map.get(neighbour, 10) <= height:
-            lowest = False
-            break
+                            break
+        # if adjacent is not X or 9 then add it to temp list and check its adjacent
+        elif readings[i][j+1] != "9":
+            readings[i][j+1] = "X"
 
-    if lowest:
-        low_points.append(coords)
-        low_points_sum += height + 1
+            basin.add((i, j+1))
 
-# Answer One
-print("Sum of risk levels of low points:", low_points_sum)
+            checkAdjacent(i, j+1, basin)
+    except IndexError:
+        pass
+    try:
+        if j-1 >= 0:
+            # if adjacen tis X then add to that list
+            if readings[i][j-1] == "X":
+                for a in range(len(basins)):
+                        for b in range(len(basins[a])):
+                            if basins[a][b] == (i,j-1):
+                                basins[a].extend(basin)
+                                basin = set()
 
-basin_sizes = []
-for low_point in low_points:
-    part_of_basin = set([low_point])
+                                break
+            # if adjacent is not X or 9 then add it to temp list and check its adjacent
+            elif readings[i][j-1] != "9":
+                readings[i][j-1] = "X"
 
-    coords_to_check_stack = [low_point]
-    while coords_to_check_stack:
-        x, y = coords_to_check_stack.pop()
-        adjacent = ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))
-        for neighbour in adjacent:
-            neighbour_height = height_map.get(neighbour, 0)
-            if neighbour_height > height_map[(x, y)] and neighbour_height != 9:
-                part_of_basin.add(neighbour)
-                coords_to_check_stack.append(neighbour)
+                basin.add((i, j-1))
 
-    basin_sizes.append(len(part_of_basin))
+                checkAdjacent(i, j-1, basin)
+    except IndexError:
+        pass
+    try:
+        # if adjacen tis X then add to that list
+        if readings[i+1][j] == "X":
+            for a in range(len(basins)):
+                    for b in range(len(basins[a])):
+                        if basins[a][b] == (i+1,j):
+                            basins[a].extend(basin)
+                            basin = set()
 
-basin_sizes.sort(reverse=True)
+                            break
+        # if adjacent is not X or 9 then add it to temp list and check its adjacent
+        elif readings[i+1][j] != "9":
+            readings[i+1][j] = "X"
 
-largest_three_product = 1
-for size in basin_sizes[:3]:
-    largest_three_product *= size
+            basin.add((i+1, j))
 
-# Answer Two
-print(basin_sizes[:3])
-print("Product of three largest basin sizes:", largest_three_product)
+            checkAdjacent(i+1, j, basin)
+    except IndexError:
+        pass
+    try:
+        if i-1 >= 0:
+            # if adjacen tis X then add to that list
+            if readings[i-1][j] == "X":
+                for a in range(len(basins)):
+                        for b in range(len(basins[a])):
+                            if basins[a][b] == (i-1,j):
+                                basins[a].extend(basin)
+                                basin = set()
+                                added = True
+
+                                break
+            # if adjacent is not X or 9 then add it to temp list and check its adjacent
+            elif readings[i-1][j] != "9":
+                readings[i-1][j] = "X"
+
+                basin.add((i-1, j))
+
+                checkAdjacent(i-1, j, basin)
+    except IndexError:
+        pass
+
+    return basin
+
+
+""" Main Function """
+if __name__ == "__main__":
+    
+    file = open("input/input9.txt", "r")
+
+    readings = [[j for j in i.strip() ] for i in file.readlines()]
+
+    """
+    List of all the basins
+    element :- list of coordinates of the all point in that basin
+    """
+    basins = []
+
+    for i in range(len(readings)):
+        for j in range(len(readings[i])):
+
+            if readings[i][j] != "9" and readings[i][j] != "X":
+                readings[i][j] = "X"
+
+                basin = checkAdjacent(i, j, set([(i,j),]))
+                if basin != set():
+                    basins.append(list(basin))
+
+    basinLen = sorted([len(i) for i in basins], reverse=True)

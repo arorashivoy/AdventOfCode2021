@@ -4,107 +4,95 @@
 # By Shivoy Arora
 
 """ Check Adjacent elements """
-def checkAdjacent(i, j, basinI):
+def checkAdjacent(i, j, basin: set):
     global readings
-    global basins
-    
-    # if the digit is not X
-    #
-    # Checking if any adjacent is X then adding it to that basin else creating a new basin
-    if basinI == -1:
-        try:
-            if readings[i][j+1] == "X":
-                for a in range(len(basins)):
+
+    try:
+        # if adjacen tis X then add to that list
+        if readings[i][j+1] == "X":
+            for a in range(len(basins)):
                     for b in range(len(basins[a])):
                         if basins[a][b] == (i,j+1):
-                            basinI = a
-
-                            basins[basinI].append((i,j))
-
-                            break
-        except IndexError:
-            pass
-    if basinI == -1:
-        try:
-            if readings[i][j-1] == "X":
-                for a in range(len(basins)):
-                    for b in range(len(basins[a])):
-                        if basins[a][b] == (i,j-1):
-                            basinI = a
-
-                            basins[basinI].append((i,j))
+                            basins[a].extend(basin)
+                            basin = set()
 
                             break
-        except IndexError:
-            pass
-    if basinI == -1:
-        try:
-            if readings[i+1][j] == "X":
-                for a in range(len(basins)):
-                    for b in range(len(basins[a])):
-                        if basins[a][b] == (i+1,j):
-                            basinI = a
-
-                            basins[basinI].append((i,j))
-
-                            break
-        except IndexError:
-            pass
-    if basinI == -1:
-        try:
-            if readings[i-1][j] == "X":
-                for a in range(len(basins)):
-                    for b in range(len(basins[a])):
-                        if basins[a][b] == (i-1,j):
-                            basinI = a
-
-                            basins[basinI].append((i,j))
-
-                            break
-        except IndexError:
-            pass
-    if basinI == -1:
-        basinI = len(basins)
-
-        basins.append([(i,j)])
-
-    # If the digit is X 
-    # Then checking its adjacent if they aren't X then adding it to that basin
-    try:
-        if readings[i][j+1] != "9" and readings[i][j+1] != "X":
+        # if adjacent is not X or 9 then add it to temp list and check its adjacent
+        elif readings[i][j+1] != "9":
             readings[i][j+1] = "X"
 
-            basins[basinI].append((i,j+1))
+            basin.add((i, j+1))
+
+            checkAdjacent(i, j+1, basin)
     except IndexError:
         pass
     try:
-        if j != 0:
-            if readings[i][j-1] != "9" and readings[i][j-1] != "X":
+        if j-1 >= 0:
+            # if adjacen tis X then add to that list
+            if readings[i][j-1] == "X":
+                for a in range(len(basins)):
+                        for b in range(len(basins[a])):
+                            if basins[a][b] == (i,j-1):
+                                basins[a].extend(basin)
+                                basin = set()
+
+                                break
+            # if adjacent is not X or 9 then add it to temp list and check its adjacent
+            elif readings[i][j-1] != "9":
                 readings[i][j-1] = "X"
 
-                basins[basinI].append((i,j-1))
+                basin.add((i, j-1))
+
+                checkAdjacent(i, j-1, basin)
     except IndexError:
         pass
     try:
-        if readings[i+1][j] != "9" and readings[i+1][j] != "X":
+        # if adjacen tis X then add to that list
+        if readings[i+1][j] == "X":
+            for a in range(len(basins)):
+                    for b in range(len(basins[a])):
+                        if basins[a][b] == (i+1,j):
+                            basins[a].extend(basin)
+                            basin = set()
+
+                            break
+        # if adjacent is not X or 9 then add it to temp list and check its adjacent
+        elif readings[i+1][j] != "9":
             readings[i+1][j] = "X"
 
-            basins[basinI].append((i+1,j))
+            basin.add((i+1, j))
+
+            checkAdjacent(i+1, j, basin)
     except IndexError:
         pass
     try:
-        if i != 0:
-            if readings[i-1][j] != "9" and readings[i-1][j] != "X":
+        if i-1 >= 0:
+            # if adjacen tis X then add to that list
+            if readings[i-1][j] == "X":
+                for a in range(len(basins)):
+                        for b in range(len(basins[a])):
+                            if basins[a][b] == (i-1,j):
+                                basins[a].extend(basin)
+                                basin = set()
+                                added = True
+
+                                break
+            # if adjacent is not X or 9 then add it to temp list and check its adjacent
+            elif readings[i-1][j] != "9":
                 readings[i-1][j] = "X"
 
-                basins[basinI].append((i-1,j))
+                basin.add((i-1, j))
+
+                checkAdjacent(i-1, j, basin)
     except IndexError:
         pass
+
+    return basin
 
 """ Main Function """
 if __name__ == "__main__":
-    # file = open("input/input9.txt", "r")
-    file = open("input/test.txt", "r")
+    file = open("input/input9.txt", "r")
+    # file = open("input/test.txt", "r")
 
     readings = [[j for j in i.strip() ] for i in file.readlines()]
 
@@ -179,28 +167,15 @@ if __name__ == "__main__":
     for i in range(len(readings)):
         for j in range(len(readings[i])):
 
-            if readings[i][j] == "X":
-                for a in range(len(basins)):
-                    for b in range(len(basins[a])):
-                        if basins[a][b] == (i,j):
-                            basinI = a
-
-                            break
-
-                checkAdjacent(i,j, basinI)
-
-            elif readings[i][j] != "9":
+            if readings[i][j] != "9" and readings[i][j] != "X":
                 readings[i][j] = "X"
 
-                checkAdjacent(i,j, -1)
+                basin = checkAdjacent(i, j, set([(i,j),]))
+                if basin != set():
+                    basins.append(list(basin))
 
-    basinLen = sorted([len(i) for i in basins])
+    basinLen = sorted([len(i) for i in basins], reverse=True)
 
     print("Part 2")
-    print("Largest elements: {}, {}, {}".format(basinLen[-3], basinLen[-2], basinLen[-1]))
-    print("Product", basinLen[-3] * basinLen[-2] * basinLen[-1])
-
-    print()
-
-    for i in basins:
-        print(i)
+    print("Largest elements: {}, {}, {}".format(basinLen[0], basinLen[1], basinLen[2]))
+    print("Product", basinLen[0] * basinLen[1] * basinLen[2])
