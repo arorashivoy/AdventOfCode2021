@@ -6,7 +6,6 @@
 
 import pygame
 from pygame import font
-from Day11 import incAdjEnergy
 
 """ Increasing the energy of the adjacent octopus """
 def incAdjEnergy(i, j):
