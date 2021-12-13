@@ -116,10 +116,6 @@ if __name__ == "__main__":
                 pygame.quit()
                 run = False
             if event.type == pygame.KEYDOWN:
-                # keys = pygame.key.get_pressed()
-
-                # if keys[pygame.K_SPACE]:
-                #     execute = not execute
                 if event.key == pygame.K_SPACE:
                     execute = not execute
 
