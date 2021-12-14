@@ -8,7 +8,7 @@ def checkAdjacent(i, j, basin: set):
     global readings
 
     try:
-        # if adjacen tis X then add to that list
+        # if adjacent is X then add to that list
         if readings[i][j+1] == "X":
             for a in range(len(basins)):
                     for b in range(len(basins[a])):
@@ -28,7 +28,7 @@ def checkAdjacent(i, j, basin: set):
         pass
     try:
         if j-1 >= 0:
-            # if adjacen tis X then add to that list
+            # if adjacent is X then add to that list
             if readings[i][j-1] == "X":
                 for a in range(len(basins)):
                         for b in range(len(basins[a])):
@@ -47,7 +47,7 @@ def checkAdjacent(i, j, basin: set):
     except IndexError:
         pass
     try:
-        # if adjacen tis X then add to that list
+        # if adjacent is X then add to that list
         if readings[i+1][j] == "X":
             for a in range(len(basins)):
                     for b in range(len(basins[a])):
@@ -67,7 +67,7 @@ def checkAdjacent(i, j, basin: set):
         pass
     try:
         if i-1 >= 0:
-            # if adjacen tis X then add to that list
+            # if adjacent is X then add to that list
             if readings[i-1][j] == "X":
                 for a in range(len(basins)):
                         for b in range(len(basins[a])):

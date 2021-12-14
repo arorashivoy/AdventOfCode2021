@@ -1,6 +1,6 @@
 # Advent Of coding 
 # Day 9 
-# Visualisation
+# Visualization
 #
 # By Shivoy Arora
 
@@ -32,7 +32,7 @@ def checkAdjacent(i, j, basin: set):
     pygame.time.delay(50)
 
     try:
-        # if adjacen tis X then add to that list
+        # if adjacent is X then add to that list
         if readings[i][j+1] == "X":
             for a in range(len(basins)):
                     for b in range(len(basins[a])):
@@ -56,7 +56,7 @@ def checkAdjacent(i, j, basin: set):
         pass
     try:
         if j-1 >= 0:
-            # if adjacen tis X then add to that list
+            # if adjacent is X then add to that list
             if readings[i][j-1] == "X":
                 for a in range(len(basins)):
                         for b in range(len(basins[a])):
@@ -79,7 +79,7 @@ def checkAdjacent(i, j, basin: set):
     except IndexError:
         pass
     try:
-        # if adjacen tis X then add to that list
+        # if adjacent is X then add to that list
         if readings[i+1][j] == "X":
             for a in range(len(basins)):
                     for b in range(len(basins[a])):
@@ -103,7 +103,7 @@ def checkAdjacent(i, j, basin: set):
         pass
     try:
         if i-1 >= 0:
-            # if adjacen tis X then add to that list
+            # if adjacent is X then add to that list
             if readings[i-1][j] == "X":
                 for a in range(len(basins)):
                         for b in range(len(basins[a])):
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     """
     basins = []
 
-    # initialising when nothing is pressed 
+    # initializing when nothing is pressed 
     win.fill((0,0,0))
     show(readings)
     pygame.display.update()
