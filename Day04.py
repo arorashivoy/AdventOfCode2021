@@ -74,7 +74,7 @@ def boardSum(index):
 """ Main Function """
 if __name__ == "__main__":
     
-    file = open("input/input4.txt", "r")
+    file = open("input/input04.txt", "r")
 
     readings = file.readlines()
 

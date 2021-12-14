@@ -91,7 +91,7 @@ def checkAdjacent(i, j, basin: set):
 
 """ Main Function """
 if __name__ == "__main__":
-    file = open("input/input9.txt", "r")
+    file = open("input/input09.txt", "r")
     # file = open("input/test.txt", "r")
 
     readings = [[j for j in i.strip() ] for i in file.readlines()]

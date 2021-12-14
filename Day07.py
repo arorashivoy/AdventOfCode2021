@@ -3,7 +3,7 @@
 #
 # By Shivoy Arora
 
-file = open("input/input7.txt", "r")
+file = open("input/input07.txt", "r")
 
 x = [int(i) for i in file.readlines()[0].split(",")]
 

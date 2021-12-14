@@ -50,7 +50,7 @@ def countOverlap(Coordinates):
 
 """ Main Function """
 if __name__ == "__main__":
-    file = open("input/input5.txt", "r")
+    file = open("input/input05.txt", "r")
 
     readings = file.readlines()
 
