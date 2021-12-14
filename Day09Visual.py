@@ -29,7 +29,7 @@ def show(readings):
 def checkAdjacent(i, j, basin: set):
     global readings
 
-    pygame.time.delay(50)
+    pygame.time.delay(1)
 
     try:
         # if adjacent is X then add to that list
@@ -179,6 +179,7 @@ if __name__ == "__main__":
                     print("Product", basinLen[0] * basinLen[1] * basinLen[2])
 
         if execute:
+            # Main Block
             if readings[index][rowIndex] != "9" and readings[index][rowIndex] != "X":
                 readings[index][rowIndex] = "X"
 
