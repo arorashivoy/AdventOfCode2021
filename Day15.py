@@ -68,8 +68,8 @@ def MinRisk():
     return minVer
 
 """ Main Function """
-# file = open("input/input15.txt","r")
-file = open("input/test.txt","r")
+file = open("input/input15.txt","r")
+# file = open("input/test.txt","r")
 readings = [i.strip() for i in file.readlines()]
 
 sptSet = [(0,0),]
@@ -97,9 +97,100 @@ print("Min Risk:", risk)
 print()
 
 # Part 2
-tempReadings = [[j for j in i] for i in readings]
+#
+# Creating the new map
+tempReadings = [[int(j) for j in i] for i in readings]
 
+# for one time towards right
 for i in range(len(readings)):
     for j in range(len(readings[i])):
-        if readings[i][j] != "9":
-            pass
+        if (int(readings[i][j])+1)%9 == 0:
+            tempReadings[i].append(9)
+        else:
+            tempReadings[i].append((int(readings[i][j])+1)%9)
+# Second time
+for i in range(len(readings)):
+    for j in range(len(readings[i])):
+        if (int(readings[i][j])+2)%9 == 0:
+            tempReadings[i].append(9)
+        else:
+            tempReadings[i].append((int(readings[i][j])+2)%9)
+# Third time
+for i in range(len(readings)):
+    for j in range(len(readings[i])):
+        if (int(readings[i][j])+3)%9 == 0:
+            tempReadings[i].append(9)
+        else:
+            tempReadings[i].append((int(readings[i][j])+3)%9)
+# Fourth time
+for i in range(len(readings)):
+    for j in range(len(readings[i])):
+        if (int(readings[i][j])+4)%9 == 0:
+            tempReadings[i].append(9)
+        else:
+            tempReadings[i].append((int(readings[i][j])+4)%9)
+
+# assigning tempReading to reading
+readings = tempReadings.copy()
+
+# for one time downwards
+for i in range(len(readings)):
+    row = []
+    for j in range(len(readings[i])):
+        if (int(readings[i][j])+1)%9 == 0:
+            row.append(9)
+        else:
+            row.append((int(readings[i][j])+1)%9)
+    tempReadings.append(row)
+# Second time
+for i in range(len(readings)):
+    row = []
+    for j in range(len(readings[i])):
+        if (int(readings[i][j])+2)%9 == 0:
+            row.append(9)
+        else:
+            row.append((int(readings[i][j])+2)%9)
+    tempReadings.append(row)
+# Third time
+for i in range(len(readings)):
+    row = []
+    for j in range(len(readings[i])):
+        if (int(readings[i][j])+3)%9 == 0:
+            row.append(9)
+        else:
+            row.append((int(readings[i][j])+3)%9)
+    tempReadings.append(row)
+# Forth time
+for i in range(len(readings)):
+    row = []
+    for j in range(len(readings[i])):
+        if (int(readings[i][j])+4)%9 == 0:
+            row.append(9)
+        else:
+            row.append((int(readings[i][j])+4)%9)
+    tempReadings.append(row)
+
+readings = tempReadings.copy()
+
+# Finding the shortest path
+sptSet = [(0,0),]
+notSptSet = set()
+
+dataset = [["X" for _ in range(len(readings[0]))] for _ in range(len(readings))]
+dataset[0][0] = 0
+
+risk = 0
+
+run = True
+while run:
+    AddAdj(sptSet[-1], risk)
+    minVertex = MinRisk()
+    sptSet.append(minVertex)
+    risk = dataset[minVertex[0]][minVertex[1]]
+
+    # if the element added to sptSet is the destination then exiting
+    if sptSet[-1] == ((len(readings) - 1), (len(readings[-1]) - 1)):
+        run = False
+
+print("Part 2")
+print("Min Risk with extended map:", risk)
