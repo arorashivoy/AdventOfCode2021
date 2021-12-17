@@ -1,123 +1,117 @@
 # Advent Of coding 
 # Day 16
-#
-# By Shivoy Arora
 
-""" Decode the binary message """
-def Decode(binary):
-    global versionSum
+class Packet:
 
-    # endIndex = None
-    # subPackets = 0
+    def __init__(self, binary):
+        self.binary = binary
+        self.version = int(self.binary[0:3], 2)
+        self.type = int(self.binary[3:6], 2)
 
-    index = 0
-    while binary[index:] != "" and int(binary[index:]) != 0:
-
-        # if endIndex and index == endIndex:
-        #     binary = "0"*(3-(len(binary[index+1:])%4)) + binary[index+1:]
-        #     index = 0
-        #     endIndex = None
-
-        version = BinToDecimal(binary[index:index+3])
-        # print("Version:", version)
-        versionSum += version
-        index += 3
-        type = BinToDecimal(binary[index:index+3])
-        index += 3
-
-        # literal type packet
-        if type == 4:
-            literalBin = ""
-
-            run = True
-            while run:
-                if binary[index] == "0":
-                    literalBin += binary[index+1:index+5]
-                    index += 5
-                    run = False
-                else:
-                    literalBin += binary[index+1:index+5]
-                    index += 5
-            # print("Literal Num:",BinToDecimal(literalBin))
-
-            # if numSubPackets:
-            #     subPackets += 1
-            #     if numSubPackets == subPackets:
-            #         subPackets = 0
-            #         binary = "0"*(3-(len(binary[index+1:])%4)) + binary[index+1:]
-            #         index = 0
-            
-
-        # operator type packet
+        if self.type == 4:
+            self.subs = []
+            self.value = self.process_literal()
         else:
-            if binary[index] == "0":
-                num = BinToDecimal(binary[index+1:index+16])
-                index += 16
-                # print("type1 ops\n")
-                Decode(binary[index:index+num])
-                index += num
+            self.subs = self.process_subpackets()
+            self.value = self.calculate_value()
 
-            elif binary[index] == "1":
-                # numSubPackets = BinToDecimal(binary[index+1:index+12])
-                index += 12
-                # print("type2 ops\n")
+        self.version_sum = self.sum_versions()
 
-""" Convert hexadecimal input to binary """
-def HexToBin():
-    global readings
+    def process_literal(self):
+        binary_value = ''
+        i = 6
+        while True:
+            group_indicator = self.binary[i]
+            binary_value += self.binary[i + 1: i + 5]
+            i += 5
+            if group_indicator == '0':
+                break
 
-    # Dictionary with hex keys and their binary values
-    hexToBin = {
-        "0": "0000",
-        "1": "0001",
-        "2": "0010",
-        "3": "0011",
-        "4": "0100",
-        "5": "0101",
-        "6": "0110",
-        "7": "0111",
-        "8": "1000",
-        "9": "1001",
-        "A": "1010",
-        "B": "1011",
-        "C": "1100",
-        "D": "1101",
-        "E": "1110",
-        "F": "1111"
-    }
+        self.length = i
+        return int(binary_value, 2)
 
-    binary = ""
+    def process_subpackets(self):
+        subpackets = []
 
-    for i in readings:
-        binary += hexToBin[i]
+        length_type = self.binary[6]
+        if length_type == '0':
+            index = 22
+            subpacket_length = int(self.binary[7: index], 2)
+            self.length = subpacket_length + index
+            to_process = self.binary[index: self.length]
 
-    return binary
+            while True:
+                subpackets.append(Packet(to_process))
+                index = subpackets[-1].length
+                if index == len(to_process):
+                    break
+                to_process = to_process[index :]
 
-""" Convert binary to decimal """
-def BinToDecimal(binary):
-    decimal = 0
+        else:
+            index = 18
+            subpacket_count = int(self.binary[7: index], 2)
 
-    for i in range(len(binary)):
-        decimal += int(binary[len(binary) - i - 1]) * (2**i)
+            self.length = index
+            to_process = self.binary[index:]
+            while len(subpackets) != subpacket_count:
+                subpackets.append(Packet(to_process))
+                self.length += subpackets[-1].length
+                index = subpackets[-1].length
+                to_process = to_process[index:]
 
-    return decimal
+        return subpackets
 
-""" Main Function """
-file = open("input/input16.txt", "r")
-# file = open("input/test.txt", "r")
+    def sum_versions(self):
+        version_sum = self.version
+        if self.subs:
+            for subpacket in self.subs:
+                version_sum += subpacket.sum_versions()
 
-readings = file.readline().strip()
+        return version_sum
 
-binary = HexToBin()
-# print("binary:", binary,"\n")
+    def calculate_value(self):
+        if self.type == 0:
+            return sum(sub.value for sub in self.subs)
 
-versionSum = 0
+        elif self.type == 1:
+            value = 1
+            for subpacket in self.subs:
+                value *= subpacket.value
+            return value
 
-index = 0
-Decode(binary)
+        elif self.type == 2:
+            return min(sub.value for sub in self.subs)
 
-print("Part 1")
-print("Version Sum:", versionSum)
+        elif self.type == 3:
+            return max(sub.value for sub in self.subs)
 
-print()
+        elif self.type == 5:
+            return 1 if self.subs[0].value > self.subs[1].value else 0
 
+        elif self.type == 6:
+            return 1 if self.subs[0].value < self.subs[1].value else 0
+
+        elif self.type == 7:
+            return 1 if self.subs[0].value == self.subs[1].value else 0
+
+
+with open('input/input16.txt', 'r') as aoc_input:
+    transmission = aoc_input.read().strip()
+
+hex_to_bin = {
+        '0': '0000', '1': '0001', '2': '0010', '3': '0011',
+        '4': '0100', '5': '0101', '6': '0110', '7': '0111',
+        '8': '1000', '9': '1001', 'A': '1010', 'B': '1011',
+        'C': '1100', 'D': '1101', 'E': '1110', 'F': '1111'
+}
+
+binary = ''.join([hex_to_bin[char] for char in transmission])
+
+processed_transmission = Packet(binary)
+
+# Answer One
+print("Sum of version numbers:", processed_transmission.version_sum)
+
+
+# Answer Two
+print("Value of BITS transmission:", processed_transmission.value)
