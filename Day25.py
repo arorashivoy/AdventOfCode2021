@@ -7,11 +7,6 @@ file = open("input/input25.txt", "r")
 
 readings = [[j for j in i.strip()] for i in file.readlines()]
 
-# for i in readings:
-#     for j in i:
-#         print(j,end="")
-#     print()
-
 ctr = 0
 changesMade = True
 while changesMade:
@@ -61,7 +56,3 @@ while changesMade:
 
 
 print("Step", ctr)
-# for i in readings:
-#     for j in i:
-#         print(j,end="")
-#     print()
