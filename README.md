@@ -1,7 +1,10 @@
-# Advent Of Code 2021
+# Advent of Code 2021
 
-This is my attempt on Advent of Code Questions
+**Archived.** Python solutions to [Advent of Code](https://adventofcode.com) 2021,
+written December 2021. 28 files covering days 1–25, plus a turtle visualisation of
+day 9. Not competitive code and not tidied up since.
 
-Code is written in Python
+Puzzle inputs are not committed — Advent of Code asks that they not be republished.
+Each script reads its input from `input/DayNN.txt`; download your own from the site.
 
-Questions can be found at : [Advent Of Code](https://adventofcode.com)
+A single day-1 solution for 2022 was also started and abandoned; it is not kept here.
